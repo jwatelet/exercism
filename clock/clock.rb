@@ -1,10 +1,10 @@
 class Clock
   attr_reader :minute, :hour
 
-  def initialize(**params)
-    @minute = params[:minute] || 0
-    @hour = params[:hour] || 0
-    calculate
+  def initialize(hour: 0, minute: 0)
+    @hour = hour
+    @minute = minute
+    normalize
   end
 
   def to_s
@@ -29,8 +29,8 @@ class Clock
 
   private
 
-  def calculate
-    @hour += minute_to_hour if @minute >= 60 || @minute.negative?
+  def normalize
+    @hour += @minute / 60 if @minute >= 60 || @minute.negative?
     @hour = @hour % 24 if @hour >= 24 || @hour.negative?
     @minute = @minute % 60
   end
@@ -41,9 +41,5 @@ class Clock
 
   def minute_to_s
     @minute.to_s.rjust(2, '0')
-  end
-
-  def minute_to_hour
-    @minute / 60
   end
 end
